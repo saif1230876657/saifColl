@@ -127,7 +127,6 @@
     }
     body.light-mode .modal .close-btn { color: var(--text-muted-light); }
     .modal .close-btn:hover { text-decoration: underline; }
-    /* NEW: Style for the join confirmation button */
     .join-confirm-btn {
         width: 100%; padding: 1rem; border: none; border-radius: 50px;
         font-weight: 700; font-size: 1.2rem; background: var(--success-color);
@@ -182,13 +181,12 @@
             <button id="search-button">بحث</button>
         </div>
         <div id="search-results">
-            <p>سيتم عرض نتيجة البحث هنا.</p>
+            <p>أدخل رمزًا للبحث عن غرفة.</p>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- مودال إنشاء غرفة -->
   <div class="modal-overlay" id="modal-create">
     <div class="modal">
       <h3>إنشاء غرفتك</h3>
@@ -205,7 +203,6 @@
     </div>
   </div>
 
-  <!-- NEW: مودال تأكيد الانضمام بعد البحث -->
   <div class="modal-overlay" id="modal-join-confirmation">
     <div class="modal">
       <h3 id="join-confirm-title">تم العثور على الغرفة!</h3>
@@ -223,7 +220,6 @@
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    // REMOVED `runTransaction` as it's no longer needed
     import { getDatabase, ref, set, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
     const firebaseConfig = {
@@ -241,7 +237,6 @@
     const database = getDatabase(app);
     let vantaEffect, userId;
 
-    // --- DOM Elements ---
     const createView = document.getElementById('create-view');
     const myRoomView = document.getElementById('my-room-view');
     const btnInitialCreate = document.getElementById('btn-initial-create');
@@ -253,7 +248,6 @@
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
     const searchResults = document.getElementById('search-results');
-    // NEW: Join Confirmation Modal Elements
     const modalJoinConfirmation = document.getElementById('modal-join-confirmation');
     const joinConfirmBtn = document.getElementById('join-confirm-btn');
     const joinConfirmClose = document.getElementById('join-confirm-close');
@@ -279,7 +273,6 @@
     function openModal(modal) { modal.classList.add('active'); }
     function closeModal(modal) { modal.classList.remove('active'); }
     
-    // Modal Event Listeners
     btnInitialCreate.onclick = () => openModal(modalCreate);
     createClose.onclick = () => closeModal(modalCreate);
     joinConfirmClose.onclick = () => closeModal(modalJoinConfirmation);
@@ -309,9 +302,7 @@
         document.getElementById('my-room-name-display').textContent = roomData.name;
         document.getElementById('my-room-code-display').textContent = roomData.password;
         
-        // **UPDATED:** Hardcoded personal link
-        const personalLink = document.getElementById('my-room-personal-link');
-        personalLink.href = 'https://saifcoll.app.100ms.live/meeting/hwi-xuoc-jms';
+        document.getElementById('my-room-personal-link').href = 'https://saifcoll.app.100ms.live/meeting/hwi-xuoc-jms';
 
         document.getElementById('my-room-share-link').onclick = () => {
             navigator.clipboard.writeText(window.location.origin)
@@ -333,7 +324,6 @@
         myRoomView.style.display = 'block';
     }
 
-    // **SIMPLIFIED:** Create room logic (no link reservation)
     createRoomSubmit.onclick = () => {
         const roomName = createRoomName.value.trim();
         const password = createRoomPassword.value.trim();
@@ -342,12 +332,7 @@
             return;
         }
 
-        const roomData = {
-            name: roomName,
-            password: password,
-            createdAt: Date.now()
-            // No more URL properties needed here
-        };
+        const roomData = { name: roomName, password: password, createdAt: Date.now() };
 
         set(ref(database, 'userRooms/' + userId), roomData).then(() => {
             alert(`تم إنشاء غرفتك بنجاح!`);
@@ -356,7 +341,6 @@
         }).catch(error => alert('حدث خطأ: ' + error.message));
     };
 
-    // **UPDATED:** Search logic to open the new modal
     searchButton.onclick = () => {
         const searchCode = searchInput.value.trim();
         if (!searchCode) {
@@ -371,9 +355,11 @@
                 let foundRoomName;
                 snapshot.forEach(child => { foundRoomName = child.val().name; });
 
-                searchResults.innerHTML = `<p>تم العثور على غرفة "${foundRoomName}"! تحقق من النافذة المنبثقة.</p>`;
+                // Reset search results text and open modal
+                searchResults.innerHTML = `<p>أدخل رمزًا للبحث عن غرفة.</p>`;
                 joinConfirmTitle.textContent = `غرفة "${foundRoomName}" متاحة`;
                 openModal(modalJoinConfirmation);
+
             } else {
                 searchResults.innerHTML = `<p>لم يتم العثور على غرفة بهذا الرمز السري. تأكد من صحة الرمز.</p>`;
             }
@@ -383,13 +369,11 @@
         });
     };
 
-    // **NEW:** Handle the join button click from the confirmation modal
     joinConfirmBtn.onclick = () => {
         const joinLink = 'https://saifcoll.app.100ms.live/meeting/nno-avhp-lzt';
         window.open(joinLink, '_blank');
         closeModal(modalJoinConfirmation);
     };
-
   </script>
 </body>
 </html>
