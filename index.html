@@ -1,226 +1,77 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Saif Coll - غرفتك الخاصة</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>تحميل التطبيق</title>
   <style>
-    :root {
-      --bg-dark: #111827; --card-bg-dark: rgba(31, 41, 55, 0.6);
-      --card-border-dark: rgba(55, 65, 81, 0.6); --text-dark: #e5e7eb;
-      --text-muted-dark: #9ca3af; --main-gradient: linear-gradient(45deg, #8b5cf6, #4f46e5);
-      --main-gradient-hover: linear-gradient(45deg, #a78bfa, #6366f1);
-      --success-color: #22c55e; --bg-light: #f3f4f6;
-      --card-bg-light: rgba(255, 255, 255, 0.7); --card-border-light: rgba(209, 213, 219, 0.8);
-      --text-light: #1f293b; --text-muted-light: #6b7280;
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px;
     }
-    body { font-family: 'Tajawal', sans-serif; margin: 0; padding: 0;
-      background-color: var(--bg-dark); color: var(--text-dark);
-      transition: background-color 0.5s, color 0.5s; overflow-x: hidden;
+    h1 {
+      margin-bottom: 40px;
     }
-    body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
-    #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    .content-wrapper { padding: 1rem 2rem; max-width: 900px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
-    h1 { margin: 0; font-size: 2.5rem; font-weight: 700; background: var(--main-gradient);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; text-fill-color: transparent;
+    .btn {
+      padding: 15px 30px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 280px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
     }
-    .toggle-mode { cursor: pointer; background: var(--card-bg-dark); border: 1px solid var(--card-border-dark);
-      border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center;
-      justify-content: center; font-size: 1.8rem; color: var(--text-dark);
-      transition: all 0.3s ease; backdrop-filter: blur(10px);
+    .drive { background: #34a853; }
+    .telegram { background: #0088cc; }
+    .counter {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 16px;
     }
-    body.light-mode .toggle-mode { background: var(--card-bg-light); border: 1px solid var(--card-border-light); color: var(--text-light); }
-    .toggle-mode:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-    #create-view { text-align: center; margin-top: 5rem; }
-    #btn-initial-create { display: inline-flex; align-items: center; gap: 0.8rem; padding: 1.2rem 3rem;
-      border: none; border-radius: 50px; font-size: 1.5rem; font-weight: 700;
-      background: var(--main-gradient); color: white; cursor: pointer;
-      transition: all 0.3s ease-in-out; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    .disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
-    #btn-initial-create:hover { transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4); background: var(--main-gradient-hover);
+    .msg {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
     }
-    #my-room-view { margin-top: 3rem; padding: 2.5rem; background: var(--card-bg-dark);
-      border: 1px solid var(--card-border-dark); border-radius: 20px;
-      backdrop-filter: blur(10px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); transition: background 0.5s;
-    }
-    body.light-mode #my-room-view { background: var(--card-bg-light); border: 1px solid var(--card-border-light); }
-    #my-room-view h2 { font-size: 2rem; margin-top: 0; margin-bottom: 2rem; text-align: center; }
-    .room-detail { display: flex; justify-content: space-between; align-items: center;
-      background-color: rgba(0,0,0,0.2); padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 1rem;
-    }
-    .room-detail-label { font-weight: 500; color: var(--text-muted-dark); }
-    body.light-mode .room-detail-label { color: var(--text-muted-light); }
-    .value-with-copy { display: flex; align-items: center; gap: 1rem; }
-    .room-detail-value { font-weight: 700; font-size: 1.2rem; }
-    .copy-btn { background: transparent; border: none; color: var(--text-muted-dark);
-      font-size: 1.5rem; cursor: pointer; padding: 0; display: flex; align-items: center; transition: all 0.2s ease;
-    }
-    body.light-mode .copy-btn { color: var(--text-muted-light); }
-    .copy-btn:hover { transform: scale(1.2); color: var(--text-dark); }
-    body.light-mode .copy-btn:hover { color: var(--text-light); }
-    .copy-btn .bx.bxs-check-circle { color: var(--success-color); }
-    .room-links { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-    .room-links a, .room-links button { flex-grow: 1; text-align: center; text-decoration: none;
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 0.8rem 1rem; border-radius: 10px; font-weight: 700; color: white;
-      transition: all 0.3s ease; border: none; font-size: 1rem;
-    }
-    .personal-link { background: var(--main-gradient); }
-    .personal-link:hover { background: var(--main-gradient-hover); transform: translateY(-3px); }
-    .share-link { background-color: var(--success-color); cursor: pointer; }
-    .share-link:hover { background-color: #16a34a; transform: translateY(-3px); }
-    #search-section { margin-top: 4rem; padding: 2rem; background: var(--card-bg-dark);
-      border: 1px solid var(--card-border-dark); border-radius: 20px; backdrop-filter: blur(10px);
-    }
-    body.light-mode #search-section { background: var(--card-bg-light); border: 1px solid var(--card-border-light); }
-    #search-section h2 { text-align: center; margin-top:0; }
-    .search-form { display: flex; gap: 1rem; }
-    #search-input { flex-grow: 1; padding: 0.8rem 1rem; border: 1px solid var(--card-border-dark);
-      border-radius: 10px; font-size: 1rem; background-color: rgba(0,0,0,0.2);
-      color: var(--text-dark); outline: none;
-    }
-    body.light-mode #search-input { background-color: rgba(255,255,255,0.5); color: var(--text-light); border-color: var(--card-border-light); }
-    #search-button { padding: 0.8rem 1.5rem; border: none; border-radius: 10px;
-      font-weight: 700; background: var(--main-gradient); color: white; cursor: pointer; transition: all 0.2s ease;
-    }
-    #search-button:hover { background: var(--main-gradient-hover); }
-    #search-results { margin-top: 1.5rem; text-align: center; min-height: 50px;
-      padding: 1rem; background-color: rgba(0,0,0,0.2); border-radius: 10px;
-    }
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7);
-      display: flex; align-items: center; justify-content: center; z-index: 9999;
-      visibility: hidden; opacity: 0; transition: opacity 0.3s ease, visibility 0s 0.3s; backdrop-filter: blur(5px);
-    }
-    .modal-overlay.active { visibility: visible; opacity: 1; transition: opacity 0.3s ease; }
-    .modal { background: var(--card-bg-dark); padding: 2rem; border-radius: 20px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); width: 90%; max-width: 400px;
-      color: var(--text-dark); border: 1px solid var(--card-border-dark);
-      transform: scale(0.95); transition: transform 0.3s ease;
-    }
-    .modal-overlay.active .modal { transform: scale(1); }
-    body.light-mode .modal { background: var(--card-bg-light); color: var(--text-light); border: 1px solid var(--card-border-light); }
-    .modal h3 { margin-top: 0; margin-bottom: 1.5rem; text-align: center; font-size: 1.8rem; font-weight: 700;
-      background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; text-fill-color: transparent;
-    }
-    .modal .form-group { margin-bottom: 1rem; }
-    .modal label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-    .modal input { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--card-border-dark);
-      border-radius: 10px; font-size: 1rem; background-color: var(--bg-dark);
-      color: var(--text-dark); box-sizing: border-box; outline: none; transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    body.light-mode .modal input { background-color: var(--bg-light); color: var(--text-light); border: 1px solid var(--card-border-light); }
-    .modal input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3); }
-    .modal button.submit-btn { width: 100%; padding: 1rem; border: none; border-radius: 50px;
-      font-weight: 700; font-size: 1.2rem; background: var(--main-gradient);
-      color: white; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    .modal button.submit-btn:hover { background: var(--main-gradient-hover); transform: scale(1.03); }
-    .modal .close-btn { background: transparent; border: none; width: 100%;
-      color: var(--text-muted-dark); font-weight: 500; font-size: 1rem;
-      margin-top: 1rem; cursor: pointer; text-align: center;
-    }
-    body.light-mode .modal .close-btn { color: var(--text-muted-light); }
-    .modal .close-btn:hover { text-decoration: underline; }
-    .join-confirm-btn {
-        width: 100%; padding: 1rem; border: none; border-radius: 50px;
-        font-weight: 700; font-size: 1.2rem; background: var(--success-color);
-        color: white; cursor: pointer; transition: all 0.3s ease;
-        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-    }
-    .join-confirm-btn:hover { background-color: #16a34a; transform: scale(1.03); }
-    #my-room-view, #create-view { display: none; }
   </style>
 </head>
 <body>
-  <div id="vanta-bg"></div>
-  <div class="content-wrapper">
-    <header>
-      <h1>Saif Coll</h1>
-      <button class="toggle-mode" onclick="toggleMode()" aria-label="Toggle dark/light mode">
-        <i id="mode-icon" class='bx bx-moon'></i>
-      </button>
-    </header>
-    <main>
-      <div id="create-view">
-        <button id="btn-initial-create"><i class='bx bx-plus-circle'></i> أنشئ غرفتك الخاصة</button>
-      </div>
-      <div id="my-room-view">
-        <h2><i class='bx bxs-star'></i> غرفتي</h2>
-        <div class="room-detail">
-            <span class="room-detail-label">اسم الغرفة</span>
-            <span id="my-room-name-display" class="room-detail-value"></span>
-        </div>
-        <div class="room-detail">
-            <span class="room-detail-label">الرمز السري</span>
-            <div class="value-with-copy">
-                <span id="my-room-code-display" class="room-detail-value"></span>
-                <button id="copy-code-btn" class="copy-btn" title="نسخ الرمز السري">
-                    <i class='bx bx-copy'></i>
-                </button>
-            </div>
-        </div>
-        <div class="room-links">
-            <a id="my-room-personal-link" href="#" target="_blank" class="personal-link">
-                <i class='bx bx-user-circle'></i> رابطك الخاص
-            </a>
-            <button id="my-room-share-link" class="share-link">
-                <i class='bx bx-share-alt'></i> شارك رابط الموقع
-            </button>
-        </div>
-      </div>
-      <div id="search-section">
-        <h2><i class='bx bx-search'></i> البحث عن غرفة</h2>
-        <div class="search-form">
-            <input type="text" id="search-input" placeholder="أدخل الرمز السري للغرفة هنا...">
-            <button id="search-button">بحث</button>
-        </div>
-        <div id="search-results">
-            <p>أدخل رمزًا للبحث عن غرفة.</p>
-        </div>
-      </div>
-    </main>
+
+  <h1>تحميل التطبيق</h1>
+
+  <div>
+    <button class="btn drive" id="drive-btn" onclick="download('drive')">
+      <span>تحميل من درايف</span>
+      <span class="counter" id="drive-count">0</span>
+    </button>
+    <div class="msg" id="drive-msg"></div>
   </div>
 
-  <div class="modal-overlay" id="modal-create">
-    <div class="modal">
-      <h3>إنشاء غرفتك</h3>
-      <div class="form-group">
-        <label for="create-room-name">اسم غرفتك</label>
-        <input type="text" id="create-room-name" placeholder="مثلاً: غرفة الأصدقاء" />
-      </div>
-      <div class="form-group">
-        <label for="create-room-password">اختر رمزًا سريًا</label>
-        <input type="password" id="create-room-password" placeholder="4 أرقام على الأقل" />
-      </div>
-      <button id="create-room-submit" class="submit-btn">إنشاء</button>
-      <button class="close-btn" id="create-close">إلغاء</button>
-    </div>
+  <div>
+    <button class="btn telegram" id="telegram-btn" onclick="download('telegram')">
+      <span>تحميل من تلجرام</span>
+      <span class="counter" id="telegram-count">0</span>
+    </button>
+    <div class="msg" id="telegram-msg"></div>
   </div>
 
-  <div class="modal-overlay" id="modal-join-confirmation">
-    <div class="modal">
-      <h3 id="join-confirm-title">تم العثور على الغرفة!</h3>
-      <p style="text-align:center; color: var(--text-muted-dark); margin-bottom: 2rem;">
-        اضغط على الزر أدناه للانضمام إلى الغرفة.
-      </p>
-      <button id="join-confirm-btn" class="join-confirm-btn">
-        <i class='bx bx-log-in-circle'></i> الانضمام الآن
-      </button>
-      <button class="close-btn" id="join-confirm-close">إلغاء</button>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <!-- Firebase SDK -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, set, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAjE-2q6PONBkCin9ZN22gDp9Q8pAH9ZW8",
@@ -234,146 +85,62 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    let vantaEffect, userId;
+    const db = getDatabase(app);
 
-    const createView = document.getElementById('create-view');
-    const myRoomView = document.getElementById('my-room-view');
-    const btnInitialCreate = document.getElementById('btn-initial-create');
-    const modalCreate = document.getElementById('modal-create');
-    const createClose = document.getElementById('create-close');
-    const createRoomName = document.getElementById('create-room-name');
-    const createRoomPassword = document.getElementById('create-room-password');
-    const createRoomSubmit = document.getElementById('create-room-submit');
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.getElementById('search-button');
-    const searchResults = document.getElementById('search-results');
-    const modalJoinConfirmation = document.getElementById('modal-join-confirmation');
-    const joinConfirmBtn = document.getElementById('join-confirm-btn');
-    const joinConfirmClose = document.getElementById('join-confirm-close');
-    const joinConfirmTitle = document.getElementById('join-confirm-title');
-
-    document.addEventListener('DOMContentLoaded', () => {
-        vantaEffect = VANTA.NET({ el: "#vanta-bg", mouseControls: true, touchControls: true, gyroControls: false,
-            minHeight: 200, minWidth: 200, scale: 1, scaleMobile: 1, color: 0x8b5cf6, backgroundColor: 0x111827,
-            points: 12, maxDistance: 20, spacing: 16
-        });
-        initializeUser();
-    });
-
-    const modeIcon = document.getElementById('mode-icon');
-    window.toggleMode = function() {
-      const isLightMode = document.body.classList.toggle('light-mode');
-      if (vantaEffect) {
-          if (isLightMode) { modeIcon.classList.replace('bx-moon', 'bx-sun'); vantaEffect.setOptions({ color: 0x4f46e5, backgroundColor: 0xf3f4f6 }); } 
-          else { modeIcon.classList.replace('bx-sun', 'bx-moon'); vantaEffect.setOptions({ color: 0x8b5cf6, backgroundColor: 0x111827 }); }
-      }
-    }
-
-    function openModal(modal) { modal.classList.add('active'); }
-    function closeModal(modal) { modal.classList.remove('active'); }
-    
-    btnInitialCreate.onclick = () => openModal(modalCreate);
-    createClose.onclick = () => closeModal(modalCreate);
-    joinConfirmClose.onclick = () => closeModal(modalJoinConfirmation);
-
-    function initializeUser() {
-        userId = localStorage.getItem('saifCollUserId');
-        if (!userId) {
-            userId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-            localStorage.setItem('saifCollUserId', userId);
-        }
-        checkUserRoom();
-    }
-    
-    function checkUserRoom() {
-        get(ref(database, 'userRooms/' + userId)).then(snapshot => {
-            if (snapshot.exists()) { displayMyRoom(snapshot.val()); } 
-            else { displayCreateView(); }
-        });
-    }
-
-    function displayCreateView() {
-        myRoomView.style.display = 'none';
-        createView.style.display = 'block';
-    }
-
-    function displayMyRoom(roomData) {
-        document.getElementById('my-room-name-display').textContent = roomData.name;
-        document.getElementById('my-room-code-display').textContent = roomData.password;
-        
-        document.getElementById('my-room-personal-link').href = 'https://saifcoll.app.100ms.live/meeting/hwi-xuoc-jms';
-
-        document.getElementById('my-room-share-link').onclick = () => {
-            navigator.clipboard.writeText(window.location.origin)
-                .then(() => alert('تم نسخ رابط الموقع! يمكنك الآن إرساله للآخرين للبحث عن غرفتك.'))
-                .catch(() => alert('فشل نسخ الرابط.'));
-        };
-
-        const copyCodeBtn = document.getElementById('copy-code-btn');
-        copyCodeBtn.onclick = () => {
-            const codeToCopy = roomData.password;
-            const icon = copyCodeBtn.querySelector('i');
-            navigator.clipboard.writeText(codeToCopy).then(() => {
-                icon.classList.replace('bx-copy', 'bxs-check-circle');
-                setTimeout(() => icon.classList.replace('bxs-check-circle', 'bx-copy'), 2000);
-            }).catch(err => alert('فشل نسخ الرمز السري.'));
-        };
-
-        createView.style.display = 'none';
-        myRoomView.style.display = 'block';
-    }
-
-    createRoomSubmit.onclick = () => {
-        const roomName = createRoomName.value.trim();
-        const password = createRoomPassword.value.trim();
-        if (!roomName || password.length < 4) {
-            alert('يرجى إدخال اسم للغرفة ورمز سري مكون من 4 أحرف على الأقل.');
-            return;
-        }
-
-        const roomData = { name: roomName, password: password, createdAt: Date.now() };
-
-        set(ref(database, 'userRooms/' + userId), roomData).then(() => {
-            alert(`تم إنشاء غرفتك بنجاح!`);
-            closeModal(modalCreate);
-            displayMyRoom(roomData);
-        }).catch(error => alert('حدث خطأ: ' + error.message));
+    const urls = {
+      drive: "https://drive.google.com/file/d/1Zua4uo1VHm1Yp6f0vMslVkVCT9ai8znx/view?usp=drivesdk",
+      telegram: "https://t.me/sezxxsz/13"
     };
 
-    searchButton.onclick = () => {
-        const searchCode = searchInput.value.trim();
-        if (!searchCode) {
-            searchResults.innerHTML = `<p>الرجاء إدخال رمز سري للبحث.</p>`;
-            return;
-        }
-        searchResults.innerHTML = `<p>جاري البحث...</p>`;
-        const searchQuery = query(ref(database, 'userRooms'), orderByChild('password'), equalTo(searchCode));
-        
-        get(searchQuery).then(snapshot => {
-            if (snapshot.exists()) {
-                let foundRoomName;
-                snapshot.forEach(child => { foundRoomName = child.val().name; });
+    const hasClicked = localStorage.getItem("downloaded") === "true";
 
-                // Reset search results text and open modal
-                searchResults.innerHTML = `<p>أدخل رمزًا للبحث عن غرفة.</p>`;
-                joinConfirmTitle.textContent = `غرفة "${foundRoomName}" متاحة`;
-                openModal(modalJoinConfirmation);
+    function disableButtons() {
+      document.getElementById("drive-btn").classList.add("disabled");
+      document.getElementById("telegram-btn").classList.add("disabled");
+      document.getElementById("drive-btn").disabled = true;
+      document.getElementById("telegram-btn").disabled = true;
+      document.getElementById("drive-msg").textContent = "لقد قمت بالتحميل من قبل";
+      document.getElementById("telegram-msg").textContent = "لقد قمت بالتحميل من قبل";
+    }
 
-            } else {
-                searchResults.innerHTML = `<p>لم يتم العثور على غرفة بهذا الرمز السري. تأكد من صحة الرمز.</p>`;
-            }
-        }).catch(error => {
-            searchResults.innerHTML = `<p>حدث خطأ أثناء البحث.</p>`;
-            console.error(error);
+    if (hasClicked) disableButtons();
+
+    function updateCounters() {
+      const driveRef = ref(db, 'clicks/drive');
+      const telegramRef = ref(db, 'clicks/telegram');
+
+      onValue(driveRef, (snapshot) => {
+        const raw = snapshot.val() || 0;
+        const count = Math.floor(raw - raw * 0.1);
+        document.getElementById('drive-count').textContent = count;
+      });
+
+      onValue(telegramRef, (snapshot) => {
+        const raw = snapshot.val() || 0;
+        const count = Math.floor(raw - raw * 0.1);
+        document.getElementById('telegram-count').textContent = count;
+      });
+    }
+
+    updateCounters();
+
+    function download(type) {
+      if (localStorage.getItem("downloaded") === "true") return;
+
+      // افتح الرابط مباشرة
+      window.open(urls[type], '_blank');
+
+      // زوّد العداد في فايربيز
+      const counterRef = ref(db, 'clicks/' + type);
+      get(counterRef).then((snapshot) => {
+        const current = snapshot.val() || 0;
+        set(counterRef, current + 1).then(() => {
+          localStorage.setItem("downloaded", "true");
+          disableButtons();
         });
-    };
-
-    joinConfirmBtn.onclick = () => {
-        const joinLink = 'https://saifcoll.app.100ms.live/meeting/nno-avhp-lzt';
-        window.open(joinLink, '_blank');
-        closeModal(modalJoinConfirmation);
-    };
+      });
+    }
   </script>
+
 </body>
 </html>
